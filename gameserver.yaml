@@ -11,10 +11,10 @@ spec:
     # Disable health checking. defaults to false, but can be set to true
     disabled: false
     # Number of seconds after the container has started before health check is initiated. Defaults to 5 seconds
-    initialDelaySeconds: 60
+    initialDelaySeconds: 30
     # If the `Health()` function doesn't get called at least once every period (seconds), then
     # the game server is not healthy. Defaults to 5
-    periodSeconds: 15
+    periodSeconds: 120
     # Minimum consecutive failures for the health probe to be considered failed after having succeeded.
     # Defaults to 3. Minimum value is 1
     failureThreshold: 10

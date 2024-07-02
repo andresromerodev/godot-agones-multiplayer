@@ -1,9 +1,10 @@
 extends Control
 
-@export var Address = "127.0.0.1"
-@export var port = 8910
+@export var Address = "192.168.59.104"
+@export var port = 7791
 
 var peer
+var elapsed_time = 0.0  # Variable to track the elapsed time
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -21,7 +22,11 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	if peer:
-		AgonesSDK.health()
+		elapsed_time += delta  # Increment the elapsed time by the time since the last frame
+		
+		if elapsed_time >= 60.0:  # Check if 60 seconds have passed
+			AgonesSDK.health()
+			elapsed_time = 0.0
 
 # this get called on the server and clients
 func peer_connected(id):
@@ -57,8 +62,9 @@ func SendPlayerInformation(name, id):
 		for i in GameManager.Players:
 			SendPlayerInformation.rpc(GameManager.Players[i].name, i)
 
-@rpc("any_peer","call_local")
+@rpc("any_peer","call_local","reliable")
 func StartGame():
+	print("Entering match...")
 	var scene = load("res://testScene.tscn").instantiate()
 	get_tree().root.add_child(scene)
 	self.hide()
