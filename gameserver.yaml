@@ -26,8 +26,8 @@ spec:
           imagePullPolicy: Always
           resources:
             requests:
-              memory: 64Mi
-              cpu: 20m
+              cpu: "1"  # Request 1 CPU core
+              memory: "2Gi"  # Request 2 GB memory
             limits:
-              memory: 64Mi
-              cpu: 20m
+              cpu: "2"  # Limit to 2 CPU cores
+              memory: "4Gi"  # Limit to 4 GB memory
