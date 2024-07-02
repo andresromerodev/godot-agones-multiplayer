@@ -1,0 +1,33 @@
+apiVersion: agones.dev/v1
+kind: GameServer
+metadata:
+  generateName: multiplayer-game-server-
+spec:
+  ports:
+    - name: default
+      portPolicy: Dynamic
+      containerPort: 8910
+  health:
+    # Disable health checking. defaults to false, but can be set to true
+    disabled: false
+    # Number of seconds after the container has started before health check is initiated. Defaults to 5 seconds
+    initialDelaySeconds: 60
+    # If the `Health()` function doesn't get called at least once every period (seconds), then
+    # the game server is not healthy. Defaults to 5
+    periodSeconds: 15
+    # Minimum consecutive failures for the health probe to be considered failed after having succeeded.
+    # Defaults to 3. Minimum value is 1
+    failureThreshold: 10
+  template:
+    spec:
+      containers:
+        - name: multiplayer-game-server
+          image: docker.io/andresromerodev/godotagonesmultiplayer:latest
+          imagePullPolicy: Always
+          resources:
+            requests:
+              memory: 64Mi
+              cpu: 20m
+            limits:
+              memory: 64Mi
+              cpu: 20m

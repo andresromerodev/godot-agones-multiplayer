@@ -12,16 +12,21 @@ config_version=5
 
 config/name="multiplayer Lan Tutorial"
 run/main_scene="res://multiplayerScene.tscn"
-config/features=PackedStringArray("4.1", "Forward Plus")
+config/features=PackedStringArray("4.2", "Forward Plus")
 config/icon="res://icon.svg"
 
 [autoload]
 
 GameManager="*res://GameManager.gd"
+AgonesSDK="*res://addons/agones/agones_sdk.gd"
 
 [dotnet]
 
 project/assembly_name="multiplayer Lan Tutorial"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/agones/plugin.cfg")
 
 [input]
 

@@ -1,23 +1,27 @@
 extends Control
 
-@export var Address = "204.48.28.159"
+@export var Address = "127.0.0.1"
 @export var port = 8910
+
 var peer
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	AgonesSDK.start()
+	
 	multiplayer.peer_connected.connect(peer_connected)
 	multiplayer.peer_disconnected.connect(peer_disconnected)
 	multiplayer.connected_to_server.connect(connected_to_server)
 	multiplayer.connection_failed.connect(connection_failed)
+	
 	if "--server" in OS.get_cmdline_args():
 		hostGame()
-	pass # Replace with function body.
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	pass
+	if peer:
+		AgonesSDK.health()
 
 # this get called on the server and clients
 func peer_connected(id):
@@ -68,6 +72,10 @@ func hostGame():
 	peer.get_host().compress(ENetConnection.COMPRESS_RANGE_CODER)
 	
 	multiplayer.set_multiplayer_peer(peer)
+	
+	AgonesSDK.ready()
+	
+	print("Reported game server as ready to Agones...")
 	print("Waiting For Players!")
 	
 	
