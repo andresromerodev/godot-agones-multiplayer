@@ -22,12 +22,12 @@ spec:
     spec:
       containers:
         - name: multiplayer-game-server
-          image: docker.io/andresromerodev/godotagonesmultiplayer:latest
+          image: docker.io/andresromerodev/godotagonesmultiplayer:latest  # Use the latest version of the multiplayer game server image
           imagePullPolicy: Always
           resources:
             requests:
-              cpu: "1"  # Request 1 CPU core
-              memory: "2Gi"  # Request 2 GB memory
+              cpu: "2"  # Request up to 2 CPU cores
+              memory: "4Gi"  # Request up to 8 GB memory
             limits:
-              cpu: "2"  # Limit to 2 CPU cores
-              memory: "4Gi"  # Limit to 4 GB memory
+              cpu: "4"  # Limit to 4 CPU cores
+              memory: "8Gi"  # Limit to 8 GB memory

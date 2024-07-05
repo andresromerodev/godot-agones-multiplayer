@@ -1,10 +1,10 @@
 extends Control
 
-@export var Address = "127.0.0.1"
-@export var port = 8910
+@export var server_port = 8910
 
 var peer
 var elapsed_time = 0.0  # Variable to track the elapsed time
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -28,9 +28,11 @@ func _process(delta):
 			AgonesSDK.health()
 			elapsed_time = 0.0
 
+
 # this get called on the server and clients
 func peer_connected(id):
 	print("Player Connected " + str(id))
+	
 	
 # this get called on the server and clients
 func peer_disconnected(id):
@@ -40,27 +42,32 @@ func peer_disconnected(id):
 	for i in players:
 		if i.name == str(id):
 			i.queue_free()
+			
+
 # called only from clients
 func connected_to_server():
 	print("connected To Sever!")
 	SendPlayerInformation.rpc_id(1, $LineEdit.text, multiplayer.get_unique_id())
 
+
 # called only from clients
 func connection_failed():
 	print("Couldnt Connect")
+
 
 @rpc("any_peer")
 func SendPlayerInformation(name, id):
 	if !GameManager.Players.has(id):
 		GameManager.Players[id] ={
-			"name" : name,
 			"id" : id,
-			"score": 0
+			"name" : "player-" + str(id),
+			"score": 0			
 		}
 	
 	if multiplayer.is_server():
 		for i in GameManager.Players:
 			SendPlayerInformation.rpc(GameManager.Players[i].name, i)
+
 
 @rpc("any_peer","call_local","reliable")
 func StartGame():
@@ -69,9 +76,10 @@ func StartGame():
 	get_tree().root.add_child(scene)
 	self.hide()
 	
+	
 func hostGame():
 	peer = ENetMultiplayerPeer.new()
-	var error = peer.create_server(port, 2)
+	var error = peer.create_server(server_port, 2)
 	if error != OK:
 		print("cannot host: " + error)
 		return
@@ -83,22 +91,14 @@ func hostGame():
 	
 	print("Reported game server as ready to Agones...")
 	print("Waiting For Players!")
-	
-	
-func _on_host_button_down():
-	hostGame()
-	SendPlayerInformation($LineEdit.text, multiplayer.get_unique_id())
-	pass # Replace with function body.
 
 
 func _on_join_button_down():
 	peer = ENetMultiplayerPeer.new()
-	peer.create_client(Address, port)
+	peer.create_client($IP.text, $PORT.text)
 	peer.get_host().compress(ENetConnection.COMPRESS_ZLIB)
 	multiplayer.set_multiplayer_peer(peer)	
-	pass # Replace with function body.
 
 
 func _on_start_game_button_down():
 	StartGame.rpc()
-	pass # Replace with function body.
