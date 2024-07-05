@@ -5,7 +5,6 @@ extends Control
 var peer
 var elapsed_time = 0.0  # Variable to track the elapsed time
 
-
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	AgonesSDK.start()
@@ -28,11 +27,9 @@ func _process(delta):
 			AgonesSDK.health()
 			elapsed_time = 0.0
 
-
 # this get called on the server and clients
 func peer_connected(id):
 	print("Player Connected " + str(id))
-	
 	
 # this get called on the server and clients
 func peer_disconnected(id):
@@ -47,27 +44,24 @@ func peer_disconnected(id):
 # called only from clients
 func connected_to_server():
 	print("connected To Sever!")
-	SendPlayerInformation.rpc_id(1, $LineEdit.text, multiplayer.get_unique_id())
-
+	SendPlayerInformation.rpc_id(1, "player-"+str(multiplayer.get_unique_id()), multiplayer.get_unique_id())
 
 # called only from clients
 func connection_failed():
 	print("Couldnt Connect")
 
-
 @rpc("any_peer")
 func SendPlayerInformation(name, id):
 	if !GameManager.Players.has(id):
 		GameManager.Players[id] ={
+			"name" : name,
 			"id" : id,
-			"name" : "player-" + str(id),
-			"score": 0			
+			"score": 0
 		}
 	
 	if multiplayer.is_server():
 		for i in GameManager.Players:
 			SendPlayerInformation.rpc(GameManager.Players[i].name, i)
-
 
 @rpc("any_peer","call_local","reliable")
 func StartGame():
@@ -75,7 +69,6 @@ func StartGame():
 	var scene = load("res://testScene.tscn").instantiate()
 	get_tree().root.add_child(scene)
 	self.hide()
-	
 	
 func hostGame():
 	peer = ENetMultiplayerPeer.new()
@@ -95,7 +88,7 @@ func hostGame():
 
 func _on_join_button_down():
 	peer = ENetMultiplayerPeer.new()
-	peer.create_client($IP.text, $PORT.text)
+	peer.create_client($IP.text, int($PORT.text))
 	peer.get_host().compress(ENetConnection.COMPRESS_ZLIB)
 	multiplayer.set_multiplayer_peer(peer)	
 
