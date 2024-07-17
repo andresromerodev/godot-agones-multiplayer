@@ -29,5 +29,5 @@ spec:
               cpu: "1"  # Request up to 1 CPU core1
               memory: "1Gi"  # Request up to 1 GB memory
             limits:
-              cpu: "1"  # Limit to 1 CPU core
+              cpu: "2"  # Limit to 1 CPU core
               memory: "2Gi"  # Limit to 2 GB memory
