@@ -12,7 +12,7 @@ spec:
     disabled: false
     # Number of seconds after the container has started before health check is initiated. Defaults to 5 seconds
     initialDelaySeconds: 30
-    # If the `Health()` function doesn't get called at least once every period (seconds), then
+    # If the Health() function does not get called at least once every period (seconds), then
     # the game server is not healthy. Defaults to 5
     periodSeconds: 120
     # Minimum consecutive failures for the health probe to be considered failed after having succeeded.
@@ -26,8 +26,8 @@ spec:
           imagePullPolicy: Always
           resources:
             requests:
-              cpu: "1"  # Request up to 1 CPU core1
+              cpu: "1"       # Request up to 1 CPU core1
               memory: "1Gi"  # Request up to 1 GB memory
             limits:
-              cpu: "2"  # Limit to 1 CPU core
+              cpu: "2"       # Limit to 1 CPU core
               memory: "2Gi"  # Limit to 2 GB memory
